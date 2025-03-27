@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root{
+    background-color: #eceaea;
+}
+
+*{
+    font-family: arial, ｍｓ ｐゴシック, ms pgothic, 돋움, dotum, helvetica, sans-serif;
+}
