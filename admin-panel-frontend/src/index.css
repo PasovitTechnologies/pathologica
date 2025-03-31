@@ -290,7 +290,7 @@ body {
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.5);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-  width: 95%;
+  width: 88%;
 }
 
 .search-input:focus {
@@ -349,6 +349,7 @@ body {
   z-index: 1003;
   margin-top: 0.5rem;
 }
+
 .status-options {
   display: flex;
   flex-direction: column;
@@ -568,6 +569,45 @@ body {
   background: rgba(52, 192, 191, 0.1);
 }
 
+/* Updated Status Select Styles for Mobile Compatibility */
+.status-select {
+  padding: 0.5rem 2rem 0.5rem 0.75rem; /* Extra padding-right for arrow */
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  appearance: none; /* Remove default browser styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  min-width: 120px; /* Ensure it doesn't shrink too much */
+  height: 40px; /* Fixed height for consistency */
+  line-height: 1; /* Prevent text misalignment */
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+}
+
+.status-select:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(52, 192, 191, 0.1);
+  transform: scale(1.01);
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(52, 192, 191, 0.2);
+  transform: scale(1.01);
+}
+
 /* Form Details Page */
 .form-details-container {
   padding: 2rem;
@@ -688,8 +728,6 @@ body {
   resize: vertical;
 }
 
-
-
 /* Table Status Dropdown (for FormTable.jsx) */
 .table-status-dropdown {
   position: relative;
@@ -736,20 +774,6 @@ body {
 .table-status-dropdown-option:hover {
   background: rgba(52, 192, 191, 0.1);
 }
-
-.status-select {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.status-select:hover {
-  border-color: #999;
-}
-
 
 .dropdown-wrapper {
   position: absolute;
@@ -862,4 +886,789 @@ body {
   pointer-events: none; /* Prevents interaction with tooltip */
 }
 
+/* Pagination Styles (for FormTable.jsx) */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--primary);
+  color: var(--text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.pagination-button:hover {
+  background: var(--secondary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(52, 192, 191, 0.3);
+}
+
+.pagination-button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-number {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  color: var(--text-dark);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-number:hover {
+  background: rgba(52, 192, 191, 0.1);
+  transform: scale(1.05);
+}
+
+.pagination-number.active {
+  background: var(--primary);
+  color: var(--text-light);
+  border-color: var(--primary);
+}
+
+.pagination-info {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+/* Responsive Design for Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Login Page */
+  .login-card {
+    padding: 2rem;
+    max-width: 90%;
+    margin: 0 1rem;
+  }
+
+  .login-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-label {
+    font-size: 1rem;
+  }
+
+  .form-input {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .login-button {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  /* Navbar */
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-logo {
+    height: 50px;
+  }
+
+  .logout-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .logout-icon {
+    font-size: 1rem;
+  }
+
+  /* Dashboard */
+  .dashboard-container {
+    padding: 1rem;
+    min-height: calc(100vh - 50px);
+  }
+
+  .filter-section {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .search-input {
+    padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+    font-size: 0.9rem;
+  }
+
+  .search-icon {
+    left: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .dropdown-toggle {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .dropdown-menu {
+    padding: 0.75rem;
+  }
+
+  .status-label {
+    font-size: 0.9rem;
+  }
+
+  .reset-button,
+  .apply-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Cards Grid */
+  .form-card {
+    padding: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 0.9rem;
+  }
+
+  .card-details p {
+    font-size: 0.75rem;
+  }
+
+  .status-section {
+    gap: 0.4rem;
+  }
+
+  .status-dropdown-toggle {
+    padding: 0.2rem 0.3rem;
+    font-size: 0.75rem;
+  }
+
+  .status-dropdown-menu {
+    padding: 0.4rem;
+  }
+
+  .status-dropdown-option {
+    font-size: 0.75rem;
+  }
+
+  /* Updated Status Select for Tablets */
+  .status-select {
+    padding: 0.4rem 1.5rem 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    min-width: 100px;
+    background-size: 0.9rem;
+    background-position: right 0.6rem center;
+    height: 36px;
+  }
+
+  /* Form Details Page */
+  .form-details-container {
+    padding: 0.75rem;
+    min-height: calc(100vh - 50px);
+  }
+
+  .form-details-card {
+    padding: 0.75rem;
+    max-height: calc(100vh - 120px);
+  }
+
+  .form-details-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-details-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .back-button,
+  .edit-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .details-section h3 {
+    font-size: 1rem;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .detail-item strong {
+    min-width: auto;
+  }
+
+  .detail-item input,
+  .detail-item select,
+  .detail-item textarea {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  /* Table Status Dropdown */
+  .table-status-dropdown-toggle {
+    font-size: 0.75rem;
+  }
+
+  .table-status-dropdown-option {
+    font-size: 0.75rem;
+  }
+
+  /* Pagination */
+  .pagination-container {
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .pagination-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .pagination-number {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .pagination-info {
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive Design for Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  /* Ensure no horizontal overflow */
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Login Page */
+  .login-page {
+    height: 100dvh; /* Use dynamic viewport height for better mobile support */
+  }
+
+  .login-card {
+    padding: 1.5rem;
+    max-width: 95%;
+    margin: 0 0.5rem;
+    border-radius: 1rem;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
+
+  .form-input {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+  }
+
+  .login-button {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0.5rem;
+  }
+
+  /* Navbar */
+  .navbar {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .navbar-logo {
+    height: 40px;
+  }
+
+  .logout-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 1rem;
+  }
+
+  .logout-icon {
+    font-size: 0.9rem;
+  }
+
+  /* Dashboard */
+  .dashboard {
+    min-height: 100dvh;
+  }
+
+  .dashboard-container {
+    padding: 0.5rem;
+    min-height: calc(100dvh - 40px);
+    gap: 0.5rem;
+  }
+
+  .filter-section {
+    padding: 0.75rem;
+    gap: 0.5rem;
+    border-radius: 1rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-input {
+    padding: 0.4rem 0.4rem 0.4rem 2rem;
+    font-size: 0.85rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-icon {
+    left: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .custom-dropdown {
+    width: 100%;
+  }
+
+  .dropdown-toggle {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+  }
+
+  .dropdown-menu {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .status-label {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .reset-button,
+  .apply-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+    border-radius: 0.4rem;
+  }
+
+  /* Cards Grid */
+  .cards-grid {
+    gap: 0.5rem;
+  }
+
+  .form-card {
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+  }
+
+  .status-line {
+    width: 3px;
+  }
+
+  .card-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .card-details {
+    gap: 0.2rem;
+  }
+
+  .card-details p {
+    font-size: 0.7rem;
+  }
+
+  .status-section {
+    gap: 0.3rem;
+  }
+
+  .status-dropdown-toggle {
+    padding: 0.15rem 0.25rem;
+    font-size: 0.7rem;
+    border-radius: 0.4rem;
+  }
+
+  .status-dropdown-menu {
+    padding: 0.3rem;
+    border-radius: 0.4rem;
+  }
+
+  .status-dropdown-option {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.3rem;
+  }
+
+  /* Updated Status Select for Mobile */
+  .status-select {
+    padding: 0.5rem 1.5rem 0.5rem 0.5rem; /* Adjusted padding for touch */
+    font-size: 0.85rem;
+    min-width: 100px;
+    background-size: 0.9rem;
+    background-position: right 0.5rem center;
+    height: 38px; /* Slightly larger for touch */
+    border-radius: 0.4rem;
+    -webkit-appearance: none; /* Ensure iOS consistency */
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  /* Form Details Page */
+  .form-details-container {
+    padding: 0.5rem;
+    min-height: calc(100dvh - 40px);
+  }
+
+  .form-details-header {
+    gap: 0.5rem;
+  }
+
+  .back-button,
+  .edit-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 0.5rem;
+  }
+
+  .form-details-card {
+    padding: 0.5rem;
+    max-height: calc(100dvh - 100px);
+    border-radius: 0.75rem;
+  }
+
+  .form-details-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-details-content {
+    gap: 1rem;
+  }
+
+  .details-section {
+    gap: 0.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .details-section h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-item {
+    gap: 0.2rem;
+  }
+
+  .detail-item input,
+  .detail-item select,
+  .detail-item textarea {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+  }
+
+  .detail-item textarea {
+    min-height: 80px;
+  }
+
+  /* Table Status Dropdown */
+  .table-status-dropdown-toggle {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.25rem;
+  }
+
+  .table-status-dropdown-menu {
+    padding: 0.3rem;
+  }
+
+  .table-status-dropdown-option {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.3rem;
+  }
+
+  /* Pagination */
+  .pagination-container {
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .pagination-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .pagination-number {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .pagination-info {
+    font-size: 0.8rem;
+  }
+
+  /* Notes */
+  .notes-container {
+    gap: 0.3rem;
+  }
+
+  .note-bubble {
+    padding: 0.4rem 0.75rem;
+    max-width: 90%;
+    font-size: 0.85rem;
+  }
+
+  .delete-note-button {
+    font-size: 0.8rem;
+    padding: 0 0.3rem;
+  }
+
+  .custom-tooltip {
+    max-width: 200px;
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+}
+
+/* Responsive Design for Very Small Screens (max-width: 360px) */
+@media (max-width: 360px) {
+  /* Login Page */
+  .login-card {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 0 0.25rem;
+  }
+
+  .login-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
+
+  .form-input {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .login-button {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  /* Navbar */
+  .navbar {
+    padding: 0.4rem 0.5rem;
+  }
+
+  .navbar-logo {
+    height: 35px;
+  }
+
+  .logout-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .logout-icon {
+    font-size: 0.85rem;
+  }
+
+  /* Dashboard */
+  .dashboard-container {
+    padding: 0.25rem;
+    min-height: calc(100dvh - 35px);
+  }
+
+  .filter-section {
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .search-input {
+    padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .search-icon {
+    left: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .dropdown-toggle {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  .dropdown-menu {
+    padding: 0.4rem;
+  }
+
+  .status-label {
+    font-size: 0.8rem;
+    padding: 0.15rem 0.3rem;
+  }
+
+  .reset-button,
+  .apply-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  /* Cards Grid */
+  .form-card {
+    padding: 0.3rem;
+  }
+
+  .card-title {
+    font-size: 0.8rem;
+  }
+
+  .card-details p {
+    font-size: 0.65rem;
+  }
+
+  .status-section {
+    gap: 0.2rem;
+  }
+
+  .status-dropdown-toggle {
+    padding: 0.1rem 0.2rem;
+    font-size: 0.65rem;
+  }
+
+  .status-dropdown-option {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.2rem;
+  }
+
+  /* Updated Status Select for Very Small Screens */
+  .status-select {
+    padding: 0.4rem 1.2rem 0.4rem 0.4rem;
+    font-size: 0.8rem;
+    min-width: 90px;
+    background-size: 0.8rem;
+    background-position: right 0.4rem center;
+    height: 34px;
+  }
+
+  /* Form Details Page */
+  .form-details-container {
+    padding: 0.25rem;
+  }
+
+  .form-details-card {
+    padding: 0.4rem;
+    max-height: calc(100dvh - 90px);
+  }
+
+  .form-details-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .back-button,
+  .edit-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .details-section h3 {
+    font-size: 0.85rem;
+  }
+
+  .detail-item input,
+  .detail-item select,
+  .detail-item textarea {
+    font-size: 0.8rem;
+    padding: 0.3rem;
+  }
+
+  /* Table Status Dropdown */
+  .table-status-dropdown-toggle {
+    font-size: 0.65rem;
+  }
+
+  .table-status-dropdown-option {
+    font-size: 0.65rem;
+  }
+
+  /* Pagination */
+  .pagination-container {
+    gap: 0.3rem;
+    margin-top: 0.75rem;
+  }
+
+  .pagination-button {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .pagination-number {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .pagination-info {
+    font-size: 0.75rem;
+  }
+
+  /* Notes */
+  .note-bubble {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .delete-note-button {
+    font-size: 0.75rem;
+  }
+
+  .custom-tooltip {
+    max-width: 180px;
+    font-size: 0.75rem;
+  }
+}
 

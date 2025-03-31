@@ -17,7 +17,7 @@ connectDB();
 app.use('/api', formRoutes);
 
 // Start Server
-const PORT = process.env.PORT || 4000;
+const PORT = 4003;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

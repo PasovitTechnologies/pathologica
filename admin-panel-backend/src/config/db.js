@@ -3,13 +3,13 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect('mongodb+srv://admin:108nAMXxGundKImC@eafo.xsbkue3.mongodb.net/patDB?retryWrites=true&w=majority&appName=eafo', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected');
+    console.log('✅ MongoDB connected');
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error('❌ MongoDB connection error:', err);
     process.exit(1);
   }
 };

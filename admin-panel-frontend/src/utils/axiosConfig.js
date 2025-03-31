@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 
 // Create an axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5001/api',
+  baseURL: 'https://adminapi.pathologica.ru/api',
+  withCredentials: true,
 });
 
 // Add a response interceptor
@@ -20,4 +21,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default axiosInstance;
