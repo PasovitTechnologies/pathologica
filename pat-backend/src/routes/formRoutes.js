@@ -1,28 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const Form = require('../models/Form');
+const Counter = require('../models/Counter');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
+const nodemailer = require('nodemailer');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const path = require('path');
 
-// Connect to MongoDB for GridFS
+// GridFS setup
 const conn = mongoose.connection;
 let gfs;
 
 conn.once('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: 'uploads',
-  });
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'uploads' });
   console.log("GridFS initialized");
 });
 
-// Multer setup for in-memory storage
+// Multer setup (unchanged)
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit per file
+  limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    // Allow widely used file types
     const filetypes = /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|ppt|pptx|txt/;
     const extname = filetypes.test(file.originalname.toLowerCase().split('.').pop());
     const mimetype = filetypes.test(file.mimetype);
@@ -32,14 +34,144 @@ const upload = multer({
       cb(new Error('Неподдерживаемый формат файла. Разрешены: JPEG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT'));
     }
   },
-}).array('medicalFiles', 10); // Max 10 files
+}).array('medicalFiles', 10);
 
+// Nodemailer setup (unchanged)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Generate PDF in memory and return buffer
+const generatePDF = (formData) => {
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ size: 'A4', margin: 50 });
+    const buffers = [];
+    
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', () => {
+      const pdfBuffer = Buffer.concat(buffers);
+      resolve(pdfBuffer);
+    });
+    doc.on('error', reject);
+
+    doc.registerFont('PTSansNarrow', path.join(__dirname, '..', 'assets', 'PTSansNarrow-Regular.ttf'));
+    doc.font('PTSansNarrow');
+
+    const logoPath = path.join(__dirname, '..', 'assets', 'Pathologica.png');
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, 50, 50, { width: 200, align: 'center' });
+    } else {
+      doc.fontSize(16).text('Pathologica', 50, 50, { align: 'center' });
+    }
+    doc.moveDown(4);
+
+    doc.fillColor('#3097a9')
+       .fontSize(16)
+       .text(`Заявка ${formData.applicationId}`, { align: 'center' })
+       .moveDown(1);
+
+    const drawDivider = () => {
+      doc.lineWidth(1)
+         .strokeColor('#d5e6e9')
+         .moveTo(50, doc.y)
+         .lineTo(550, doc.y)
+         .stroke()
+         .moveDown(1);
+    };
+
+    const addField = (label, value) => {
+      if (value !== undefined && value !== null && value !== '' && value !== false) {
+        doc.fillColor('#08788b')
+           .fontSize(12)
+           .text(`${label}:`, 70, doc.y, { continued: true })
+           .fillColor('#000000')
+           .text(` ${value}`, { align: 'left' })
+           .moveDown(0.5);
+      }
+    };
+
+    doc.fontSize(14).fillColor('#08788b').text('Общая информация', 50, doc.y);
+    drawDivider();
+    addField('Кем Вы приходитесь пациенту', formData.relationToPatient);
+    addField('Вид консультации', formData.consultationType);
+    addField('Категория исследования', formData.researchCategory);
+
+    if (formData.relationToPatient === 'Я доверенное лицо') {
+      doc.fontSize(14).fillColor('#08788b').text('Данные доверенного лица', 50, doc.y);
+      drawDivider();
+      addField('Фамилия', formData.trusteeSurname);
+      addField('Имя', formData.trusteeName);
+      addField('Отчество', formData.trusteePatronymic);
+      addField('Телефон', formData.trusteePhoneNumber);
+      addField('Электронная почта', formData.trusteeEmail);
+    }
+
+    doc.fontSize(14).fillColor('#08788b').text('Данные пациента', 50, doc.y);
+    drawDivider();
+    addField('Фамилия', formData.lastName);
+    addField('Имя', formData.firstName);
+    addField('Отчество', formData.middleName);
+    addField('Пол', formData.gender);
+    addField('Дата рождения', formData.dateOfBirth.toLocaleDateString('ru-RU'));
+    addField('Возраст', formData.age);
+    addField('Телефон', formData.phoneNumber);
+    addField('Электронная почта', formData.email);
+
+    doc.fontSize(14).fillColor('#08788b').text('Медицинская информация', 50, doc.y);
+    drawDivider();
+    addField('Клинический диагноз', formData.clinicalDiagnosis);
+    addField('Локализация процесса', formData.processLocalization);
+    addField('Способ получения материала', formData.materialCollectionMethod);
+    addField('Количество локализаций', formData.numberOfLocalizations);
+    addField('Количество контейнеров', formData.numberOfContainers);
+    addField('Количество стекол', formData.numberOfGlasses);
+    addField('Количество стекол к изготовлению', formData.numberOfGlassesToBeMade);
+    addField('Цена исследования', `${formData.researchPrice} ₽`);
+    addField('Промокод', formData.promoCode);
+
+    doc.fontSize(14).fillColor('#08788b').text('Доставка', 50, doc.y);
+    drawDivider();
+    addField('Способ доставки', formData.deliveryMethod);
+    if (formData.deliveryMethod === 'Курьером') {
+      addField('Город', formData.city);
+      addField('Улица', formData.street);
+      addField('Дом', formData.house);
+      addField('Квартира', formData.apartment);
+    }
+    addField('Комментарий', formData.comment);
+    addField('Согласие на обработку данных', formData.consentGiven ? 'Да' : 'Нет');
+
+    doc.end();
+  });
+};
+
+// POST route with GridFS PDF storage
 router.post('/forms', upload, async (req, res) => {
   try {
     const formData = req.body;
     const files = req.files;
 
-    // Store files in GridFS and collect their IDs
+    // Generate Application ID
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    let counter = await Counter.findOne({ month: parseInt(month), year });
+    if (!counter) {
+      counter = new Counter({ month: parseInt(month), year, count: 0 });
+    }
+    counter.count += 1;
+    await counter.save();
+
+    const formNumber = String(counter.count).padStart(3, '0');
+    const applicationId = `№PLG-${formNumber}/${month}/${year}`;
+    formData.applicationId = applicationId;
+
+    // Store medical files in GridFS
     const fileIds = [];
     if (files && files.length > 0) {
       for (const file of files) {
@@ -53,29 +185,62 @@ router.post('/forms', upload, async (req, res) => {
         });
       }
     }
-
-    // Add file IDs to formData
     formData.medicalFiles = fileIds;
 
     // Convert string numbers to actual numbers
-    if (formData.numberOfLocalizations) {
-      formData.numberOfLocalizations = parseInt(formData.numberOfLocalizations);
-    }
-    if (formData.numberOfContainers) {
-      formData.numberOfContainers = parseInt(formData.numberOfContainers);
-    }
-    if (formData.numberOfGlasses) {
-      formData.numberOfGlasses = parseInt(formData.numberOfGlasses);
-    }
-    if (formData.numberOfGlassesToBeMade) {
-      formData.numberOfGlassesToBeMade = parseInt(formData.numberOfGlassesToBeMade);
-    }
-    if (formData.dateOfBirth) {
-      formData.dateOfBirth = new Date(formData.dateOfBirth);
-    }
+    if (formData.numberOfLocalizations) formData.numberOfLocalizations = parseInt(formData.numberOfLocalizations);
+    if (formData.numberOfContainers) formData.numberOfContainers = parseInt(formData.numberOfContainers);
+    if (formData.numberOfGlasses) formData.numberOfGlasses = parseInt(formData.numberOfGlasses);
+    if (formData.numberOfGlassesToBeMade) formData.numberOfGlassesToBeMade = parseInt(formData.numberOfGlassesToBeMade);
+    if (formData.dateOfBirth) formData.dateOfBirth = new Date(formData.dateOfBirth);
 
     const form = new Form(formData);
+
+    // Generate PDF and store in GridFS
+    const pdfBuffer = await generatePDF(form);
+    const pdfFileName = `Заявка_${form.applicationId.replace(/№PLG-/, '').replace(/\//g, '_')}.pdf`;
+    const pdfUploadStream = gfs.openUploadStream(pdfFileName, {
+      contentType: 'application/pdf',
+    });
+    pdfUploadStream.end(pdfBuffer);
+    const pdfId = pdfUploadStream.id;
+    form.tempPdfPath = pdfId.toString(); // Store GridFS ID as string
     await form.save();
+
+    // Retrieve PDF from GridFS for email attachment
+    const pdfDownloadStream = gfs.openDownloadStream(pdfId);
+    const pdfBuffers = [];
+    pdfDownloadStream.on('data', (chunk) => pdfBuffers.push(chunk));
+    const pdfAttachment = await new Promise((resolve, reject) => {
+      pdfDownloadStream.on('end', () => resolve(Buffer.concat(pdfBuffers)));
+      pdfDownloadStream.on('error', reject);
+    });
+
+    // Send email with PDF attachment
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: 'vansh.vjain20@gmail.com',
+      subject: `Получена новая заявка ${form.applicationId} - ${form.consultationType}`,
+      text: `
+        Получена новая заявка на ${form.consultationType}.
+        Дополнительная информация доступна в личном кабинете:
+        https://admin.pathologica.ru
+      `,
+      attachments: [
+        {
+          filename: pdfFileName,
+          content: pdfAttachment,
+        },
+      ],
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    // Delete PDF from GridFS
+    await gfs.delete(pdfId);
+    form.tempPdfPath = '';
+    await form.save();
+
     res.status(201).json({ message: 'Заявка успешно отправлена' });
   } catch (err) {
     if (err.name === 'ValidationError') {

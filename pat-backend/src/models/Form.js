@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
+  applicationId: { type: String, unique: true, required: true },
   relationToPatient: { type: String, required: true },
   consultationType: { type: String, required: true },
   researchCategory: {
@@ -119,7 +120,8 @@ const formSchema = new mongoose.Schema({
   comment: { type: String, default: '' },
   consentGiven: { type: Boolean, required: true },
   submittedAt: { type: Date, default: Date.now },
-  createdAt: { type: Date, default: Date.now }, // Added createdAt field
+  createdAt: { type: Date, default: Date.now },
+  tempPdfPath: { type: String, default: '' }, // Added createdAt field
 });
 
 module.exports = mongoose.model('Form', formSchema);

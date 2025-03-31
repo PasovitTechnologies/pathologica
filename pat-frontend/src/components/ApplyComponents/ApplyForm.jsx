@@ -13,6 +13,7 @@ import axios from "axios";
 function ApplyForm() {
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     relationToPatient: null,
     consultationType: null,
@@ -276,6 +277,7 @@ function ApplyForm() {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     try {
       const formDataToSend = new FormData();
       const fieldsToExcludeForPathologist = [
@@ -292,33 +294,34 @@ function ApplyForm() {
         "house",
         "apartment",
       ];
-
+  
       Object.keys(formData).forEach((key) => {
         if (
           formData.consultationType === "Консультация Патолога" &&
           fieldsToExcludeForPathologist.includes(key)
         ) {
-          return; // Skip these fields for Pathologist Consultation
+          return;
         }
         if (key === "medicalFiles") {
           formData[key].forEach((file) => {
             formDataToSend.append("medicalFiles", file);
           });
         } else {
-          formDataToSend.append(key, formData[key] ?? ""); // Use empty string if null/undefined
+          formDataToSend.append(key, formData[key] ?? "");
         }
       });
-
-      const response = await axios.post("https://api.pathologica.ru/api/forms", formDataToSend, {
+  
+      const response = await axios.post("http://localhost:4000/api/forms", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      toast.success("Заявка успешно отправлена", {
+  
+      toast.success(response.data.message || "Заявка успешно отправлена", {
         position: "top-center",
       });
       console.log(response.data.message);
+  
       setFormData({
         relationToPatient: null,
         consultationType: null,
@@ -359,34 +362,31 @@ function ApplyForm() {
       console.error("Ошибка при отправке формы:", err);
       if (err.response) {
         const errorData = err.response.data;
-        if (errorData.error === "Ошибка валидации") {
-          if (errorData.details.includes("Неподдерживаемый формат файла")) {
-            toast.error(errorData.details[0], {
-              position: "top-center",
-            });
-          } else if (errorData.details.includes("File too large")) {
-            toast.error("Файл слишком большой. Максимальный размер — 20 МБ.", {
-              position: "top-center",
-            });
-          } else if (errorData.details.includes("Too many files")) {
-            toast.error("Слишком много файлов. Максимум — 10 файлов.", {
-              position: "top-center",
-            });
-          } else {
-            toast.error("Ошибка валидации: " + errorData.details.join(", "), {
-              position: "top-center",
-            });
-          }
+        if (errorData.error === 'Ошибка валидации') {
+          const errorMessage = errorData.details.join(", ");
+          toast.error(`Ошибка валидации: ${errorMessage}`, {
+            position: "top-center",
+          });
+        } else if (errorData.error.includes('Файл слишком большой')) {
+          toast.error("Файл слишком большой. Максимальный размер — 20 МБ.", {
+            position: "top-center",
+          });
+        } else if (errorData.error.includes('Слишком много файлов')) {
+          toast.error("Слишком много файлов. Максимум — 10 файлов.", {
+            position: "top-center",
+          });
         } else {
-          toast.error("Ошибка при отправке формы: " + errorData.error, {
+          toast.error(errorData.error || "Ошибка при отправке формы", {
             position: "top-center",
           });
         }
       } else {
-        toast.error("Ошибка сети. Пожалуйста, проверьте ваше интернет-соединение.", {
+        toast.error("Ошибка сети. Проверьте ваше соединение.", {
           position: "top-center",
         });
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -395,15 +395,13 @@ function ApplyForm() {
     const isValid = validateStep();
     console.log("Validation passed:", isValid);
     if (isValid) {
-      // For "Консультация Патолога", move to FormScreenPathologistFinal before submitting
       if (
         (step === 3 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я пациент") ||
         (step === 4 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я доверенное лицо")
       ) {
         console.log("Moving to FormScreenPathologistFinal");
-        setStep(step + 1); // Move to FormScreenPathologistFinal (Step 4 or 5)
+        setStep(step + 1);
       }
-      // Submit the form only on the final step (FormScreenPathologistFinal or FormScreen4)
       else if (
         (step === 4 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я пациент") ||
         (step === 5 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я доверенное лицо") ||
@@ -415,7 +413,7 @@ function ApplyForm() {
       } else {
         if (step === 1 && formData.relationToPatient === "Я доверенное лицо") {
           console.log("Moving to Step 2 (Trustee Details)");
-          setStep(2); // Go to Trustee Details
+          setStep(2);
         } else {
           console.log("Moving to Step", step + 1);
           setStep((prev) => prev + 1);
@@ -432,9 +430,9 @@ function ApplyForm() {
       (step === 3 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я пациент") ||
       (step === 4 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я доверенное лицо")
     ) {
-      setStep(step - 1); // Go back to FormScreen3 (Medical Information)
+      setStep(step - 1);
     } else if (step === 3 && formData.consultationType === "Консультация Патолога") {
-      setStep(1); // Go back to FormScreen1
+      setStep(1);
     } else {
       setStep((prev) => Math.max(prev - 1, 1));
     }
@@ -514,8 +512,20 @@ function ApplyForm() {
 
   return (
     <div className="relative max-w-4xl px-3 md:px-10 my-10 mx-auto tracking-tighter">
+      {/* Import PT Sans Narrow from Google Fonts */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap"
+        rel="stylesheet"
+      />
+      <style>
+        {`
+          .apply-form-container, .apply-form-container * {
+            font-family: 'PT Sans Narrow', sans-serif !important;
+          }
+        `}
+      </style>
       <ToastContainer />
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden apply-form-container">
         <div>
           <div className="flex flex-col md:flex-row gap-5 items-start border-b-2 border-[#08788b] p-3 md:p-6">
             <div className="flex items-center w-fit">
@@ -540,14 +550,17 @@ function ApplyForm() {
             </button>
             <button
               onClick={handleNext}
+              disabled={isSubmitting}
               className="px-4 py-2 bg-[#2f86c4] text-white hover:bg-[#2f86e9] transition-all duration-300 rounded-full shadow-md shadow-black/40 cursor-pointer"
             >
-              {((step === 4 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я пациент") ||
-                (step === 5 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я доверенное лицо") ||
-                (step === 4 && formData.relationToPatient === "Я пациент" && formData.consultationType !== "Консультация Патолога") ||
-                (step === 5 && formData.relationToPatient === "Я доверенное лицо" && formData.consultationType !== "Консультация Патолога"))
-                ? "Отправить"
-                : "Далее"}
+              {isSubmitting
+                ? "Отправка формы..."
+                : ((step === 4 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я пациент") ||
+                  (step === 5 && formData.consultationType === "Консультация Патолога" && formData.relationToPatient === "Я доверенное лицо") ||
+                  (step === 4 && formData.relationToPatient === "Я пациент" && formData.consultationType !== "Консультация Патолога") ||
+                  (step === 5 && formData.relationToPatient === "Я доверенное лицо" && formData.consultationType !== "Консультация Патолога"))
+                  ? "Отправить"
+                  : "Далее"}
             </button>
           </div>
         </div>

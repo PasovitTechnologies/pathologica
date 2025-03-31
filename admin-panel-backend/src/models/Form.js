@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
+  applicationId: { type: String, unique: true, required: true },
   relationToPatient: { type: String, required: true },
   consultationType: { type: String, required: true },
   researchCategory: {

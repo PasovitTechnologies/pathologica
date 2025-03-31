@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/axiosConfig'; // Adjust path as needed
 import { toast } from 'react-toastify';
-import { FaArrowLeft, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaTrash, FaFileAlt } from 'react-icons/fa';
 import Navbar from './Navbar';
 
 const FormDetails = () => {
@@ -12,6 +12,7 @@ const FormDetails = () => {
   const [newNote, setNewNote] = useState('');
   const [status, setStatus] = useState('');
   const [hoveredNote, setHoveredNote] = useState(null);
+  const [hoveredFile, setHoveredFile] = useState(null);
 
   const statusMap = {
     'Завершено': 'Completed',
@@ -102,6 +103,7 @@ const FormDetails = () => {
 
   const isTrustee = form.relationToPatient === "Я доверенное лицо";
   const notesArray = form.notes ? form.notes.split('\n').filter(note => note.trim()) : [];
+  const medicalFiles = Array.isArray(form.medicalFiles) ? form.medicalFiles : [];
 
   return (
     <div className="dashboard">
@@ -113,7 +115,9 @@ const FormDetails = () => {
           </button>
         </div>
         <div className="form-details-card">
-          <h2 className="form-details-title">{`${form.firstName} ${form.lastName}`}</h2>
+          <h2 className="form-details-title">
+            {`${form.firstName} ${form.lastName} (${form.applicationId})`}
+          </h2>
           <div className="form-details-content">
             {/* Status and Submitted At */}
             <div className="details-section">
@@ -273,6 +277,51 @@ const FormDetails = () => {
                 <strong>Количество стекол для изготовления:</strong>
                 <span>{form.numberOfGlassesToBeMade ?? <span className="empty-field">Отсутствует</span>}</span>
               </div>
+            </div>
+
+            {/* Medical Files Section */}
+            <div className="details-section">
+              <h3>Медицинские файлы</h3>
+              {medicalFiles.length > 0 ? (
+                <>
+                  {/* First row: Up to 3 files */}
+                  <div className="medical-files-row">
+                    {medicalFiles.slice(0, 3).map((file, index) => (
+                      <div
+                        key={file.fileId ? file.fileId.toString() : `file-${index}`}
+                        className="medical-file-icon"
+                        onMouseEnter={() => setHoveredFile(index)}
+                        onMouseLeave={() => setHoveredFile(null)}
+                      >
+                        <FaFileAlt className="file-icon" />
+                        {hoveredFile === index && file.filename && (
+                          <div className="custom-tooltip">{file.filename}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Second row: Carousel for remaining files if more than 3 */}
+                  {medicalFiles.length > 3 && (
+                    <div className="medical-files-carousel">
+                      {medicalFiles.slice(3).map((file, index) => (
+                        <div
+                          key={file.fileId ? file.fileId.toString() : `file-${index + 3}`}
+                          className="medical-file-icon"
+                          onMouseEnter={() => setHoveredFile(index + 3)}
+                          onMouseLeave={() => setHoveredFile(null)}
+                        >
+                          <FaFileAlt className="file-icon" />
+                          {hoveredFile === index + 3 && file.filename && (
+                            <div className="custom-tooltip">{file.filename}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <span className="empty-field">Отсутствует</span>
+              )}
             </div>
 
             {/* Additional Information */}
