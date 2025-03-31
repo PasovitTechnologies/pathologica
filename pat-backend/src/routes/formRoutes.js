@@ -219,7 +219,7 @@ router.post('/forms', upload, async (req, res) => {
     // Send email with PDF attachment
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'vansh.vjain20@gmail.com',
+      to: 'office@pathologica.ru',
       subject: `Получена новая заявка ${form.applicationId} - ${form.consultationType}`,
       text: `
         Получена новая заявка на ${form.consultationType}.
