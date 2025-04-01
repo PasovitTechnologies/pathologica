@@ -239,7 +239,7 @@ router.post('/forms', upload, async (req, res) => {
     const mailOptions = {
       from: 'vanshnewsbot@gmail.com',
       to: 'office@pathologica.ru',
-      subject: `Получена новая заявка ${form.applicationId} - ${form.consultationType}`,
+      subject: `${form.applicationId} - ${form.consultationType}`,
       text: `Получена новая заявка на ${form.consultationType}.\nДополнительная информация доступна в личном кабинете: https://admin.pathologica.ru`,
       attachments: [{ filename: pdfFileName, content: pdfAttachment }],
     };
