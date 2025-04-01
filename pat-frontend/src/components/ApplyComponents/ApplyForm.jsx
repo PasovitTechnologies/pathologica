@@ -311,7 +311,7 @@ function ApplyForm() {
         }
       });
   
-      const response = await axios.post("http://localhost:4000/api/forms", formDataToSend, {
+      const response = await axios.post("https://api.pathologica.ru/api/forms", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
