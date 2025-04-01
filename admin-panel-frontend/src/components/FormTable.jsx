@@ -11,8 +11,8 @@ const FormTable = () => {
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [tempStatuses, setTempStatuses] = useState([]);
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const formsPerPage = 5; // Number of forms per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const formsPerPage = 5;
   const navigate = useNavigate();
 
   const statusMap = {
@@ -51,11 +51,13 @@ const FormTable = () => {
         const firstName = form.firstName || '';
         const lastName = form.lastName || '';
         const email = form.email || '';
+        const applicationId = form.applicationId || ''; // Add applicationId for search
         const search = searchTerm.toLowerCase().trim();
         return (
           firstName.toLowerCase().includes(search) ||
           lastName.toLowerCase().includes(search) ||
-          email.toLowerCase().includes(search)
+          email.toLowerCase().includes(search) ||
+          applicationId.toLowerCase().includes(search) // Search by applicationId
         );
       });
     }
@@ -125,7 +127,7 @@ const FormTable = () => {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top on page change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -136,7 +138,7 @@ const FormTable = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Поиск по имени или email..."
+            placeholder="Поиск по имени или электронной почте..." // Updated placeholder
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -190,13 +192,16 @@ const FormTable = () => {
                 <h3 className="card-title">{`${form.firstName} ${form.lastName}`}</h3>
                 <div className="card-details">
                   <p>
-                    <strong>Электронная почта:</strong> {form.email}
+                    <strong>ID заявки:</strong> {form.applicationId || 'Отсутствует'} {/* Added applicationId */}
                   </p>
                   <p>
-                    <strong>Тип консультации:</strong> {form.consultationType}
+                    <strong>Электронная почта:</strong> {form.email || 'Отсутствует'}
                   </p>
                   <p>
-                    <strong>Цена:</strong> {form.researchPrice} ₽
+                    <strong>Тип консультации:</strong> {form.consultationType || 'Отсутствует'}
+                  </p>
+                  <p>
+                    <strong>Цена:</strong> {form.researchPrice ? `${form.researchPrice} ₽` : 'Отсутствует'}
                   </p>
                   <div
                     className="status-section"
