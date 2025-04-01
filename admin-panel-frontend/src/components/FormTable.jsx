@@ -138,7 +138,7 @@ const FormTable = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Поиск по имени или электронной почте..." // Updated placeholder
+            placeholder="Поиск по имени, электронной почте или ID заявки..." // Updated placeholder
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
