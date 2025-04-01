@@ -7,10 +7,11 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 require('dotenv').config();
 
+console.log('JWT_SECRET:', process.env.JWT_SECRET); // Add this line
 
 app.use(cors({
-  origin: 'https://admin.pathologica.ru',  // ✅ Only allow your frontend domain
-  credentials: true,                        // ✅ Allow cookies and authorization headers
+  origin: 'https://admin.pathologica.ru',
+  credentials: true,
 }));
 app.use(express.json());
 
