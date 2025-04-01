@@ -156,7 +156,6 @@ router.post('/forms', upload, async (req, res) => {
     const formData = req.body;
     const files = req.files;
 
-    // Generate Application ID
     console.log('Generating applicationId...');
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -177,7 +176,6 @@ router.post('/forms', upload, async (req, res) => {
     formData.applicationId = applicationId;
     console.log('Generated applicationId:', applicationId);
 
-    // Store medical files
     console.log('Storing medical files...');
     const fileIds = [];
     if (files && files.length > 0) {
@@ -193,7 +191,6 @@ router.post('/forms', upload, async (req, res) => {
     formData.medicalFiles = fileIds;
     console.log('Medical files stored:', fileIds);
 
-    // Convert fields
     if (formData.numberOfLocalizations) formData.numberOfLocalizations = parseInt(formData.numberOfLocalizations);
     if (formData.numberOfContainers) formData.numberOfContainers = parseInt(formData.numberOfContainers);
     if (formData.numberOfGlasses) formData.numberOfGlasses = parseInt(formData.numberOfGlasses);
@@ -205,7 +202,6 @@ router.post('/forms', upload, async (req, res) => {
     await form.save();
     console.log('Initial form saved:', form._id);
 
-    // Generate PDF
     console.log('Generating PDF...');
     const pdfBuffer = await generatePDF(form).catch(err => {
       console.error('PDF generation failed:', err);
@@ -213,18 +209,23 @@ router.post('/forms', upload, async (req, res) => {
     });
     console.log('PDF generated, size:', pdfBuffer.length);
 
-    // Store PDF in GridFS
     if (!gfs) throw new Error('GridFS not initialized');
     const pdfFileName = `Заявка_${form.applicationId.replace(/№PLG-/, '').replace(/\//g, '_')}.pdf`;
     const pdfUploadStream = gfs.openUploadStream(pdfFileName, { contentType: 'application/pdf' });
-    pdfUploadStream.end(pdfBuffer);
+    
+    // Wait for upload to finish
+    await new Promise((resolve, reject) => {
+      pdfUploadStream.on('finish', resolve);
+      pdfUploadStream.on('error', reject);
+      pdfUploadStream.end(pdfBuffer);
+    });
+    
     const pdfId = pdfUploadStream.id;
     form.tempPdfPath = pdfId.toString();
     console.log('PDF stored in GridFS, tempPdfPath:', pdfId);
     await form.save();
     console.log('Form updated with tempPdfPath');
 
-    // Email
     console.log('Retrieving PDF for email...');
     const pdfDownloadStream = gfs.openDownloadStream(pdfId);
     const pdfBuffers = [];
@@ -249,7 +250,6 @@ router.post('/forms', upload, async (req, res) => {
     });
     console.log('Email sent');
 
-    // Cleanup
     console.log('Deleting PDF from GridFS...');
     await gfs.delete(pdfId);
     form.tempPdfPath = '';
