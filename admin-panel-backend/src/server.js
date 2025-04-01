@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
@@ -5,9 +6,10 @@ const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') }); // Point to admin-panel-backend/.env
 
-console.log('JWT_SECRET:', process.env.JWT_SECRET); // Add this line
+console.log('Current directory:', process.cwd());
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
 app.use(cors({
   origin: 'https://admin.pathologica.ru',
