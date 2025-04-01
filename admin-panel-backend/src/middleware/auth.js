@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const auth = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   if (!token) {
-    return res.redirect('/login'); // Redirect to login if no token
+    return res.status(401).json({ error: 'No token provided' });
   }
 
   try {
@@ -11,7 +11,7 @@ const auth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return res.redirect('/login'); // Redirect to login on any JWT error
+    return res.status(401).json({ error: 'Invalid or expired token' });
   }
 };
 
