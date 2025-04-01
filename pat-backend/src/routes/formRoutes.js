@@ -40,8 +40,8 @@ const upload = multer({
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'vanshnewsbot@gmail.com',
-    pass: 'nqqk lggg dugp ixjl',
+    user: 'pathologica@e-registrar.org',
+    pass: 'bhon qbdt zxry rgkq',
   },
 });
 
@@ -237,7 +237,7 @@ router.post('/forms', upload, async (req, res) => {
     console.log('PDF retrieved for email, size:', pdfAttachment.length);
 
     const mailOptions = {
-      from: 'vanshnewsbot@gmail.com',
+      from: 'pathologica@e-registrar.org',
       to: 'office@pathologica.ru',
       subject: `${form.applicationId} - ${form.consultationType}`,
       text: `Получена новая заявка на ${form.consultationType}.\nДополнительная информация доступна в личном кабинете: https://admin.pathologica.ru`,
