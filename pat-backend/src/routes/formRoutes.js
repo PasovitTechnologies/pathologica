@@ -10,7 +10,7 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 
-// GridFS setup
+// GridFS setup (unchanged)
 const conn = mongoose.connection;
 let gfs;
 
@@ -45,7 +45,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Generate PDF in memory and return buffer
+// Generate PDF in memory and return buffer (unchanged except applicationId reference)
 const generatePDF = (formData) => {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ size: 'A4', margin: 50 });
@@ -71,7 +71,7 @@ const generatePDF = (formData) => {
 
     doc.fillColor('#3097a9')
        .fontSize(16)
-       .text(`Заявка ${formData.applicationId}`, { align: 'center' })
+       .text(`Заявка ${formData.applicationId}`, { align: 'center' }) // Updated format reflected here
        .moveDown(1);
 
     const drawDivider = () => {
@@ -149,7 +149,7 @@ const generatePDF = (formData) => {
   });
 };
 
-// POST route with GridFS PDF storage
+// POST route with updated applicationId logic
 router.post('/forms', upload, async (req, res) => {
   try {
     console.log('Received form submission:', req.body);
@@ -158,21 +158,25 @@ router.post('/forms', upload, async (req, res) => {
 
     console.log('Generating applicationId...');
     const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
     const year = now.getFullYear();
 
-    let counter = await Counter.findOne({ month: parseInt(month), year });
+    let counter = await Counter.findOne({ year });
     console.log('Counter fetched:', counter);
+
     if (!counter) {
-      counter = new Counter({ month: parseInt(month), year, count: 0 });
+      // Set initial count based on year
+      const initialCount = year === 2025 ? 22 : 0; // Start at 22 for 2025, 0 for others
+      counter = new Counter({ year, count: initialCount });
       console.log('New counter created:', counter);
     }
+
     counter.count += 1;
     await counter.save();
     console.log('Counter saved:', counter);
 
-    const formNumber = String(counter.count).padStart(3, '0');
-    const applicationId = `№PLG-${formNumber}/${month}/${year}`;
+    // No padding with zeros, just use the raw count
+    const formNumber = counter.count;
+    const applicationId = `№PLG-${formNumber}/${year}`;
     formData.applicationId = applicationId;
     console.log('Generated applicationId:', applicationId);
 
@@ -213,7 +217,6 @@ router.post('/forms', upload, async (req, res) => {
     const pdfFileName = `Заявка_${form.applicationId.replace(/№PLG-/, '').replace(/\//g, '_')}.pdf`;
     const pdfUploadStream = gfs.openUploadStream(pdfFileName, { contentType: 'application/pdf' });
     
-    // Wait for upload to finish
     await new Promise((resolve, reject) => {
       pdfUploadStream.on('finish', resolve);
       pdfUploadStream.on('error', reject);
