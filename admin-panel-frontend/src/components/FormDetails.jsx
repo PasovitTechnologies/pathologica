@@ -30,7 +30,7 @@ const FormDetails = () => {
     const fetchForm = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axiosInstance.get(`/admin/forms/${id}`, {
+        const response =  await axiosInstance.get(`/admin/forms/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setForm(response.data);
@@ -116,7 +116,7 @@ const FormDetails = () => {
         </div>
         <div className="form-details-card">
           <h2 className="form-details-title">
-            {`${form.lastName}${form.firstName}${form.middleName || ''} (${form.applicationId})`}
+            {`${form.lastName} ${form.firstName} ${form.middleName || ''} (${form.applicationId})`}
           </h2>
           <div className="form-details-content">
             <div className="details-section">

@@ -51,7 +51,7 @@ const FormTable = () => {
         const firstName = form.firstName || '';
         const lastName = form.lastName || '';
         const middleName = form.middleName || '';
-        const fullName = `${lastName}${firstName}${middleName}`.toLowerCase();
+        const fullName = `${lastName} ${firstName} ${middleName}`.toLowerCase().trim();
         const email = form.email || '';
         const applicationId = form.applicationId || '';
         const search = searchTerm.toLowerCase().trim();
@@ -189,7 +189,7 @@ const FormTable = () => {
             >
               <div className="status-line"></div>
               <div className="card-content">
-                <h3 className="card-title">{`${form.lastName}${form.firstName}${form.middleName || ''}`}</h3>
+                <h3 className="card-title">{`${form.lastName} ${form.firstName} ${form.middleName || ''}`}</h3>
                 <div className="card-details">
                   <p>
                     <strong>ID заявки:</strong> {form.applicationId || 'Отсутствует'}
