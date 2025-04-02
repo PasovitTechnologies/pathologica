@@ -239,7 +239,7 @@ router.post('/forms', upload, async (req, res) => {
 
     // Office email (original)
     const officeMailOptions = {
-      from: 'pathologica@e-registrar.org',
+      from: '"PathoLogica Service" <pathologica@e-registrar.org>',
       to: 'office@pathologica.ru',
       subject: `${form.applicationId} - ${form.consultationType}`,
       text: `Получена новая заявка на ${form.consultationType}.\nДополнительная информация доступна в личном кабинете: https://admin.pathologica.ru`,
@@ -268,7 +268,7 @@ www.pathologica.ru
     `;
 
     const patientMailOptions = {
-      from: 'pathologica@e-registrar.org',
+      from: '"PathoLogica Service" pathologica@e-registrar.org',
       subject: `${form.applicationId} - ЗАЯВКА PATHOLOGICA SERVICE`,
       text: patientMailContent,
     };
