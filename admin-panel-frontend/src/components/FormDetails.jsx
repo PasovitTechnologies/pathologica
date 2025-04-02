@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosConfig'; // Adjust path as needed
+import axiosInstance from '../utils/axiosConfig';
 import { toast } from 'react-toastify';
 import { FaArrowLeft, FaTrash, FaFileAlt } from 'react-icons/fa';
 import Navbar from './Navbar';
@@ -116,10 +116,9 @@ const FormDetails = () => {
         </div>
         <div className="form-details-card">
           <h2 className="form-details-title">
-            {`${form.firstName} ${form.lastName} (${form.applicationId})`}
+            {`${form.lastName}${form.firstName}${form.middleName || ''} (${form.applicationId})`}
           </h2>
           <div className="form-details-content">
-            {/* Status and Submitted At */}
             <div className="details-section">
               <h3>Статус и дата подачи</h3>
               <div className="detail-item">
@@ -148,7 +147,6 @@ const FormDetails = () => {
               </div>
             </div>
 
-            {/* Personal Information */}
             <div className="details-section">
               <h3>{isTrustee ? "Информация о доверенном лице" : "Информация о пациенте"}</h3>
               {isTrustee && (
@@ -205,7 +203,6 @@ const FormDetails = () => {
               </div>
             </div>
 
-            {/* Contact Information */}
             <div className="details-section">
               <h3>Контактная информация</h3>
               <div className="detail-item">
@@ -238,7 +235,6 @@ const FormDetails = () => {
               </div>
             </div>
 
-            {/* Medical Information */}
             <div className="details-section">
               <h3>Медицинская информация</h3>
               <div className="detail-item">
@@ -279,12 +275,10 @@ const FormDetails = () => {
               </div>
             </div>
 
-            {/* Medical Files Section */}
             <div className="details-section">
               <h3>Медицинские файлы</h3>
               {medicalFiles.length > 0 ? (
                 <>
-                  {/* First row: Up to 3 files */}
                   <div className="medical-files-row">
                     {medicalFiles.slice(0, 3).map((file, index) => (
                       <div
@@ -300,7 +294,6 @@ const FormDetails = () => {
                       </div>
                     ))}
                   </div>
-                  {/* Second row: Carousel for remaining files if more than 3 */}
                   {medicalFiles.length > 3 && (
                     <div className="medical-files-carousel">
                       {medicalFiles.slice(3).map((file, index) => (
@@ -324,7 +317,6 @@ const FormDetails = () => {
               )}
             </div>
 
-            {/* Additional Information */}
             <div className="details-section">
               <h3>Дополнительная информация</h3>
               <div className="detail-item">
@@ -345,7 +337,6 @@ const FormDetails = () => {
               </div>
             </div>
 
-            {/* Notes Section */}
             <div className="details-section">
               <h3>Заметки</h3>
               <div className="notes-container">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/axiosConfig'; // Adjust path as needed
+import axiosInstance from '../utils/axiosConfig';
 import { toast } from 'react-toastify';
 import { FaSearch, FaTimes, FaCheck, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -50,14 +50,15 @@ const FormTable = () => {
       filtered = filtered.filter((form) => {
         const firstName = form.firstName || '';
         const lastName = form.lastName || '';
+        const middleName = form.middleName || '';
+        const fullName = `${lastName}${firstName}${middleName}`.toLowerCase();
         const email = form.email || '';
-        const applicationId = form.applicationId || ''; // Add applicationId for search
+        const applicationId = form.applicationId || '';
         const search = searchTerm.toLowerCase().trim();
         return (
-          firstName.toLowerCase().includes(search) ||
-          lastName.toLowerCase().includes(search) ||
+          fullName.includes(search) ||
           email.toLowerCase().includes(search) ||
-          applicationId.toLowerCase().includes(search) // Search by applicationId
+          applicationId.toLowerCase().includes(search)
         );
       });
     }
@@ -68,7 +69,7 @@ const FormTable = () => {
     }
 
     setFilteredForms(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -117,7 +118,6 @@ const FormTable = () => {
     navigate(`/form/${id}`);
   };
 
-  // Pagination Logic
   const totalForms = filteredForms.length;
   const totalPages = Math.ceil(totalForms / formsPerPage);
   const startIndex = (currentPage - 1) * formsPerPage;
@@ -138,7 +138,7 @@ const FormTable = () => {
           <FaSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Поиск по имени, электронной почте или ID заявки..." // Updated placeholder
+            placeholder="Поиск по имени, электронной почте или ID заявки..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -189,10 +189,10 @@ const FormTable = () => {
             >
               <div className="status-line"></div>
               <div className="card-content">
-                <h3 className="card-title">{`${form.firstName} ${form.lastName}`}</h3>
+                <h3 className="card-title">{`${form.lastName}${form.firstName}${form.middleName || ''}`}</h3>
                 <div className="card-details">
                   <p>
-                    <strong>ID заявки:</strong> {form.applicationId || 'Отсутствует'} {/* Added applicationId */}
+                    <strong>ID заявки:</strong> {form.applicationId || 'Отсутствует'}
                   </p>
                   <p>
                     <strong>Электронная почта:</strong> {form.email || 'Отсутствует'}
@@ -225,7 +225,6 @@ const FormTable = () => {
         ))}
       </div>
 
-      {/* Pagination Controls */}
       {totalForms > formsPerPage && (
         <div className="pagination-container">
           <button

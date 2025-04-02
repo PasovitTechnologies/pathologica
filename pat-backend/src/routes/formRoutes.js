@@ -45,7 +45,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Generate PDF in memory and return buffer (unchanged except applicationId reference)
+// Generate PDF in memory and return buffer (unchanged)
 const generatePDF = (formData) => {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ size: 'A4', margin: 50 });
@@ -71,7 +71,7 @@ const generatePDF = (formData) => {
 
     doc.fillColor('#3097a9')
        .fontSize(16)
-       .text(`Заявка ${formData.applicationId}`, { align: 'center' }) // Updated format reflected here
+       .text(`Заявка ${formData.applicationId}`, { align: 'center' })
        .moveDown(1);
 
     const drawDivider = () => {
@@ -149,7 +149,7 @@ const generatePDF = (formData) => {
   });
 };
 
-// POST route with updated applicationId logic
+// POST route with updated email sending logic
 router.post('/forms', upload, async (req, res) => {
   try {
     console.log('Received form submission:', req.body);
@@ -164,8 +164,7 @@ router.post('/forms', upload, async (req, res) => {
     console.log('Counter fetched:', counter);
 
     if (!counter) {
-      // Set initial count based on year
-      const initialCount = year === 2025 ? 22 : 0; // Start at 22 for 2025, 0 for others
+      const initialCount = year === 2025 ? 22 : 0;
       counter = new Counter({ year, count: initialCount });
       console.log('New counter created:', counter);
     }
@@ -174,7 +173,6 @@ router.post('/forms', upload, async (req, res) => {
     await counter.save();
     console.log('Counter saved:', counter);
 
-    // No padding with zeros, just use the raw count
     const formNumber = counter.count;
     const applicationId = `№PLG-${formNumber}/${year}`;
     formData.applicationId = applicationId;
@@ -239,19 +237,82 @@ router.post('/forms', upload, async (req, res) => {
     });
     console.log('PDF retrieved for email, size:', pdfAttachment.length);
 
-    const mailOptions = {
+    // Office email (original)
+    const officeMailOptions = {
       from: 'pathologica@e-registrar.org',
       to: 'office@pathologica.ru',
       subject: `${form.applicationId} - ${form.consultationType}`,
       text: `Получена новая заявка на ${form.consultationType}.\nДополнительная информация доступна в личном кабинете: https://admin.pathologica.ru`,
       attachments: [{ filename: pdfFileName, content: pdfAttachment }],
     };
-    console.log('Sending email...');
-    await transporter.sendMail(mailOptions).catch(err => {
-      console.error('Email sending failed:', err);
+    console.log('Sending office email...');
+    await transporter.sendMail(officeMailOptions).catch(err => {
+      console.error('Office email sending failed:', err);
       throw err;
     });
-    console.log('Email sent');
+    console.log('Office email sent');
+
+    // Patient/Trustee email
+    const patientMailContent = `
+Здравствуйте!
+Мы приняли Вашу заявку.
+В ближайшее время с Вами свяжется наш менеджер для уточнения всех деталей.
+
+Благодарим Вас за проявленный интерес к нашему проекту! 
+
+С уважением,
+Команда PathoLogica Service
+office@pathologica.ru
+Тел.: +79151290927
+www.pathologica.ru
+    `;
+
+    const patientMailOptions = {
+      from: 'pathologica@e-registrar.org',
+      subject: `${form.applicationId} - ЗАЯВКА PATHOLOGICA SERVICE`,
+      text: patientMailContent,
+    };
+
+    // Determine recipients based on relationToPatient
+    if (formData.relationToPatient === 'Я пациент') {
+      patientMailOptions.to = formData.email;
+      console.log('Sending email to patient:', formData.email);
+      await transporter.sendMail(patientMailOptions).catch(err => {
+        console.error('Patient email sending failed:', err);
+        throw err;
+      });
+      console.log('Patient email sent');
+    } else if (formData.relationToPatient === 'Я доверенное лицо') {
+      // If trustee and patient emails are different, send to both
+      if (formData.trusteeEmail !== formData.email) {
+        // Send to trustee
+        patientMailOptions.to = formData.trusteeEmail;
+        console.log('Sending email to trustee:', formData.trusteeEmail);
+        await transporter.sendMail(patientMailOptions).catch(err => {
+          console.error('Trustee email sending failed:', err);
+          throw err;
+        });
+        console.log('Trustee email sent');
+
+        // Send to patient
+        patientMailOptions.to = formData.email;
+        console.log('Sending email to patient:', formData.email);
+        await transporter.sendMail(patientMailOptions).catch(err => {
+          console.error('Patient email sending failed:', err);
+          throw err;
+        });
+        console.log('Patient email sent');
+      } else {
+        // If emails are the same, send only once
+        patientMailOptions.to = formData.trusteeEmail;
+        console.log('Sending email to trustee/patient (same email):', formData.trusteeEmail);
+        await transporter.sendMail(patientMailOptions).catch(err => {
+          console.error('Trustee/patient email sending failed:', err);
+          throw err;
+        });
+        console.log('Trustee/patient email sent');
+      }
+    }
 
     console.log('Deleting PDF from GridFS...');
     await gfs.delete(pdfId);
