@@ -28,8 +28,8 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="flex flex-col md:flex-row h-auto md:h-[43rem] border-t border-[#2f606c]">
-      <div className="w-full md:w-1/2 relative overflow-hidden h-[24rem] md:h-auto">
+   <section className="flex flex-col xl:flex-row h-auto xl:h-[43rem] border-t border-[#2f606c]">
+       <div className="w-full xl:w-1/2 relative overflow-hidden h-[24rem] lg:h-[30rem] xl:h-auto">
         <img
           ref={imageRef}
           src="https://static.wixstatic.com/media/e6f22e_e5e78d0836d34599aaa943e2abfd29a6~mv2.jpg"
@@ -38,8 +38,8 @@ const Hero = () => {
         />
       </div>
 
-      <div className="w-full md:w-1/2 bg-[#2f606c] text-white p-6 sm:p-10 md:p-12 md:pr-20 lg:pr-36 flex flex-col justify-center">
-        <h2 className="text-3xl text-center  sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-14">
+      <div className="w-full xl:w-1/2 bg-[#2f606c] text-white p-6 sm:p-10 md:p-12  xl:pr-36 flex flex-col justify-center">
+         <h2 className="text-3xl text-center  sm:text-4xl md:text-5xl xl:text-6xl font-bold mb-6 sm:mb-14">
           PathoLogica Service
         </h2>
 
