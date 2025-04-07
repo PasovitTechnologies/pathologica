@@ -59,13 +59,13 @@ const Experts = () => {
         <h2 className="text-3xl md:text-[3.2rem] tracking-tight font-bold text-center mb-5 text-[#1A1415]">
           Эксперты PathoLogica Service
         </h2>
-        <div className="space-y-5 md:space-y-16  bg-white  md:p-6 rounded-lg shadow-lg">
+        <div className="space-y-5 lg:space-y-16  bg-white  md:p-6 rounded-lg shadow-lg">
           {experts.map((expert, index) => (
             <div
               key={index}
-              className="p-6 flex flex-col-reverse gap-5 md:gap-0 md:flex-row items-center md:items-start"
+             className="p-6 flex flex-col-reverse gap-5 lg:gap-0 lg:flex-row items-center lg:items-start"
             >
-              <div className="md:w-[65%] tracking-tight text-center md:text-left px-4">
+              <div className="lg:w-[65%] tracking-tight text-center lg:text-left px-4">
                 <h3 className="text-2xl md:text-[2.45rem] font-bold mb-4 md:mb-8">
                   {expert.name}
                 </h3>
@@ -85,7 +85,7 @@ const Experts = () => {
                   {expert.location}
                 </p>
               </div>
-              <div className="md:w-[35%] flex justify-center mt-6 md:mt-0">
+              <div className="lg:w-[35%] flex justify-center mt-6 lg:mt-0">
                 <img
                   src={expert.image}
                   alt={expert.name}
