@@ -91,7 +91,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
           <label className="block text-[#08788b] text-[1.4rem] mb-1">
             Если есть, пожалуйста, прикрепите фотографии или сканы медицинских записей, а также фотографии проявлений заболевания.
           </label>
-          <div className="relative w-full md:w-[50%]">
+          <div className="relative w-full lg:w-[50%]">
             <input
               type="file"
               multiple
@@ -142,7 +142,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             type="text"
             value={formData.processLocalization || ""}
             onChange={(e) => handleChange("processLocalization", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             required
           />
           {errors.processLocalization && (
@@ -161,7 +161,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             type="text"
             value={formData.materialCollectionMethod || ""}
             onChange={(e) => handleChange("materialCollectionMethod", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             required
           />
           {errors.materialCollectionMethod && (
@@ -180,7 +180,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             min="1"
             value={formData.numberOfLocalizations || ""}
             onChange={(e) => handleNumberChange("numberOfLocalizations", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             required
           />
           {errors.numberOfLocalizations && (
@@ -199,7 +199,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             min="1"
             value={formData.numberOfContainers || ""}
             onChange={(e) => handleNumberChange("numberOfContainers", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             required
           />
           {errors.numberOfContainers && (
@@ -218,7 +218,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             min="1"
             value={formData.numberOfGlasses || ""}
             onChange={(e) => handleNumberChange("numberOfGlasses", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             required
           />
           {errors.numberOfGlasses && (
@@ -237,7 +237,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
             min="0"
             value={formData.numberOfGlassesToBeMade ?? ""}
             onChange={(e) => handleNumberChange("numberOfGlassesToBeMade", e.target.value)}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           />
           {errors.numberOfGlassesToBeMade && (
             <p className="text-red-500 text-sm italic mt-1">{errors.numberOfGlassesToBeMade}</p>
@@ -258,7 +258,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
               <input
                 type="text"
                 value={formData.researchPrice || "0"}
-                className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+                className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
                 readOnly
               />
               <span className="ml-2 text-[#08788b]">₽</span>
@@ -273,7 +273,7 @@ const FormScreen3 = ({ formData, handleChange, errors }) => {
               type="text"
               value={formData.promoCode || ""}
               onChange={(e) => handleChange("promoCode", e.target.value)}
-              className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+              className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             />
           </div>
         </>
