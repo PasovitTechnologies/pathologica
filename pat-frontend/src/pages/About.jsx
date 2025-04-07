@@ -2,9 +2,9 @@ import React from "react";
 
 const About = () => {
   return (
-    <section className="w-full max-w-6xl px-4 mx-auto py-1.5 mb-10 flex justify-center">
+    <section className="w-full max-w-6xl px-4 mx-auto py-1.5 mb-10 flex justify-center lg:mb-60 xl:mb-0">
       <div className="container mx-auto relative ">
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-col lg:flex-row items-center">
           <div className="w-full">
             <img
               src="https://static.wixstatic.com/media/e6f22e_e5e78d0836d34599aaa943e2abfd29a6~mv2.jpg" // Replace with actual image path
@@ -13,7 +13,7 @@ const About = () => {
             />
           </div>
 
-          <div className="md:w-[28.5rem]   md:absolute right-16 top-6 bg-white/60 p-6 text-justify text-[0.95rem] tracking-tight leading-6 ">
+          <div className="lg:w-[28.5rem]   lg:absolute right-16 top-6 bg-white/60 p-6 text-justify text-[0.95rem] tracking-tight leading-6 ">
             <p className=" ">
               &nbsp; &nbsp;{" "}
               <b className="text-[1.075rem]">PathoLogica Service </b> — это
