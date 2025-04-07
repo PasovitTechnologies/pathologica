@@ -3,7 +3,7 @@ import React from "react";
 const OurServices = () => {
   return (
     <section
-      className="-z-10 relative pt-4 pb-13 bg-cover bg-center bg-fixed"
+      className="-z-10 lg:mb-20 xl:mb-0 relative pt-4 pb-13 bg-cover bg-center bg-fixed"
       style={{
         backgroundImage: `url('https://static.wixstatic.com/media/a31a5a_e99bbbf837484c6eb2a4ff285508b4db~mv2.jpg')`,
       }}
