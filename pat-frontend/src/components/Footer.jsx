@@ -2,11 +2,11 @@ const Footer = () => {
   return (
     <footer className="bg-[#64B5C5] text-white text-center pt-10">
       <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-2xl md:text-4xl font-bold mb-2 uppercase">
+        <h2 className="text-2xl lg:text-4xl font-bold mb-2 uppercase">
           КОНТАКТНЫЕ ДАННЫЕ
         </h2>
 
-        <div className="flex flex-col md:flex-row justify-between text-lg md:text-[1.38rem] tracking-tight items-center">
+        <div className="flex flex-col md:flex-row justify-between text-lg lg:text-[1.38rem] tracking-tight items-center">
           <div className="md:text-left text-center ">
             <p className="">Адрес: г. Москва,</p>
             <p className="">Волоколамское шоссе д.1 стр. 1, офис 606С</p>
@@ -51,7 +51,7 @@ const Footer = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className=" hover:underline text-lg md:text-[1.35rem] font-[650] cursor-pointer"
+                  className=" hover:underline text-lg lg:text-[1.35rem] font-[650] cursor-pointer"
                 >
                   <a href={item.link} className="text-white ">
                     {item.label}
