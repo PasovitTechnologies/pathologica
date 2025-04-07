@@ -56,7 +56,7 @@ const Delivery = () => {
       <div className="absolute inset-0 bg-gray-200/70 -z-10"></div>
 
       <div className="relative z-10 max-w-5xl px-4 md:px-10 mx-auto">
-        <div className="max-w-5xl p-4 md:p-6 md:pl-4 mx-auto bg-white">
+        <div className="max-w-5xl p-4 md:p-6 lg:pl-4 mx-auto bg-white">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
             КАК ВОСПОЛЬЗОВАТЬСЯ УСЛУГАМИ PathoLogica Service
           </h2>
@@ -64,16 +64,16 @@ const Delivery = () => {
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="flex flex-col md:flex-row items-start md:items-center md:justify-between"
+                className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between"
               >
-                <div className="md:w-[18%] mx-auto">
+                <div className="lg:w-[18%] mx-auto">
                   <img
                     src={step.imgSrc}
                     alt={step.title}
-                    className="w-32 h-32 object-contain mb-4 md:mb-0"
+                    className="w-32 h-32 object-contain mb-4 lg:mb-0"
                   />
                 </div>
-                <div className="md:w-[80%]">
+                <div className="lg:w-[80%]">
                   <h4 className="text-[1.1rem] font-semibold">
                     &nbsp; &nbsp; &nbsp; &nbsp; {step.title}
                   </h4>
