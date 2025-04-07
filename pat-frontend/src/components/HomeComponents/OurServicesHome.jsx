@@ -41,10 +41,10 @@ const services = [
 const OurServicesHome = () => {
   return (
     <section className="text-[#333333] pt-10">
-      <div className=" mx-auto px-6 md:px-20">
+      <div className=" mx-auto px-6 lg:px-20">
         <h2 className="text-5xl  font-bold text-center mb-8">Наши услуги</h2>
 
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
           {services.map((service, index) => (
             <div key={index} className="bg-white shadow-lg overflow-hidden">
               <div className="h-52 w-full">
