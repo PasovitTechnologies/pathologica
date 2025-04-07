@@ -113,7 +113,7 @@ const FormScreen4 = ({ formData, handleChange, errors }) => {
         <select
           value={formData.deliveryMethod || ""}
           onChange={(e) => handleChange("deliveryMethod", e.target.value)}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           required
         >
           <option value="" disabled>
