@@ -527,7 +527,7 @@ function ApplyForm() {
       <ToastContainer />
       <div className="bg-white rounded-lg shadow-md overflow-hidden apply-form-container">
         <div>
-          <div className="flex flex-col md:flex-row gap-5 items-start border-b-2 border-[#08788b] p-3 md:p-6">
+          <div className="flex flex-col lg:flex-row gap-5 items-start border-b-2 border-[#08788b] p-3 md:p-6">
             <div className="flex items-center w-fit">
               <img
                 src="https://static.wixstatic.com/media/e6f22e_26677178adb448a9a9816ef76b9020b9~mv2.png"
