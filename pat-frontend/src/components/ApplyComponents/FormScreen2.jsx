@@ -45,7 +45,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           type="text"
           value={formData.lastName || ""}
           onChange={(e) => handleChange("lastName", e.target.value.trim())}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           required
         />
         {errors.lastName && (
@@ -61,7 +61,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           type="text"
           value={formData.firstName || ""}
           onChange={(e) => handleChange("firstName", e.target.value.trim())}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           required
         />
         {errors.firstName && (
@@ -77,7 +77,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           type="text"
           value={formData.middleName || ""}
           onChange={(e) => handleChange("middleName", e.target.value.trim())}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
         />
       </div>
 
@@ -124,7 +124,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
             type="date"
             value={formData.dateOfBirth || ""}
             onChange={handleDobChange}
-            className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+            className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
             placeholder="дд/мм/гггг"
             required
           />
@@ -143,7 +143,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           type="number"
           value={formData.age || ""}
           onChange={(e) => handleChange("age", e.target.value)}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           readOnly
         />
       </div>
@@ -156,10 +156,10 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           country={"ru"}
           value={formData.phoneNumber || ""}
           onChange={handlePhoneChange}
-          inputClass="!w-full md:!w-[50%] !rounded !shadow-md !shadow-black/30 !border-none !bg-[#d5e6e9] !p-5.5 !text-black !pl-10"
+          inputClass="!w-full lg:!w-[50%] !rounded !shadow-md !shadow-black/30 !border-none !bg-[#d5e6e9] !p-5.5 !text-black !pl-10"
           buttonClass="!bg-[#d5e6e9] !border-none"
           dropdownClass="!bg-white !text-black !shadow-lg"
-          containerClass="w-full md:w-[50%]"
+          containerClass="w-full lg:w-[50%]"
           enableSearch
           inputProps={{
             required: true,
@@ -181,7 +181,7 @@ const FormScreen2 = ({ formData, handleChange, errors }) => {
           type="email"
           value={formData.email || ""}
           onChange={(e) => handleChange("email", e.target.value.trim())}
-          className="w-full md:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
+          className="w-full lg:w-[50%] shadow-md shadow-black/30 p-2 border bg-[#d5e6e9] border-none rounded"
           required
         />
         {errors.email && (
